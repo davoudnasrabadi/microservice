@@ -1,4 +1,4 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column,CreateDateColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'user' })
@@ -16,13 +16,13 @@ export class User extends BaseEntity {
   @Column('boolean', {default: false})
   isDeleted:boolean;
   
-  @Column({ type: 'date',default:Date.now() })
-  createdAt: string;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }) 
+  createdAt: Date;
 
-  @Column({ type: 'date',default:Date.now()})
-  updatedAt: string;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }) 
+  updatedAt: Date;
 
-  @Column({ type: 'date'})
-  deletedAt: string;
-
+  @Column({ type: 'timestamp', nullable:true}) 
+  deletedAt: Date;
+  
 }
