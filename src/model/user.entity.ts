@@ -19,4 +19,10 @@ export class User extends BaseEntity {
   @Column({ type: 'date',default:Date.now() })
   created_at: string;
 
+  @Column({ type: 'date',default:Date.now()})
+  updatedAt: string;
+
+  @Column({ type: 'date'})
+  deletedAt: string;
+
 }
