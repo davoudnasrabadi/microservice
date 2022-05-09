@@ -1,12 +1,12 @@
 import { Controller, Post,Get, Body, Param, Delete, Put, UsePipes } from '@nestjs/common';
 import { GrpcMethod} from '@nestjs/microservices';
-import {CreateUserDto} from '../Dto/user.dto';
+import {CreateUserDto} from '../Dto/createUser.dto';
 import { UserService } from './user.service';
-import { UserById } from './interfaces';
+import { UserById } from '../interfaces/index';
 import { Metadata, ServerUnaryCall } from '@grpc/grpc-js';
 import { User } from '../model/user.entity';
 import {Observable} from 'rxjs';
-import {ValidationPipe} from './myPipe';
+import {ValidationPipe} from '../pipes/myPipe';
 
 @Controller('users')
 export class UserController {
