@@ -14,10 +14,10 @@ export class User extends BaseEntity {
   password: string;
 
   @Column('boolean', {default: false})
-  isdeleted:boolean;
+  isDeleted:boolean;
   
   @Column({ type: 'date',default:Date.now() })
-  created_at: string;
+  createdAt: string;
 
   @Column({ type: 'date',default:Date.now()})
   updatedAt: string;
