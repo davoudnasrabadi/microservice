@@ -6,6 +6,7 @@ import { User } from '../model/user.entity';
 import { UserDto } from '../Dto/user.dto';
 import {serialize} from 'class-transformer';
 import { type } from 'os';
+import { date } from 'joi';
 @Injectable()
 export class UserService {
 
@@ -53,7 +54,9 @@ export class UserService {
 
             return {msg:"user not found"};
         }
-        await this.userRepositoy.delete(id)
+        console.log(Date())
+    
+        await this.userRepositoy.update({id:id},{isDeleted:true,deletedAt:Date()});
         return {msg:"user deleted"}
        }
     catch(err){
