@@ -7,14 +7,13 @@ import { Metadata, ServerUnaryCall } from '@grpc/grpc-js';
 import { User } from '../model/user.entity';
 import {Observable} from 'rxjs';
 import {ValidationPipe} from '../pipes/myPipe';
-
+import {ResponseDto} from '../Dto/responseDto';
 @Controller('users')
 export class UserController {
     constructor(private userService:UserService){}
     
     @GrpcMethod('UsersService', 'CreateOne')
     create(data:any){
-        console.log(data);
         return this.userService.createUser(data);
     }
     

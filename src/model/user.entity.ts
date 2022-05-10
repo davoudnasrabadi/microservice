@@ -1,6 +1,7 @@
-import { Entity, Column,CreateDateColumn } from 'typeorm';
+import { Entity, Column,CreateDateColumn,JoinColumn ,OneToOne} from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { BaseEntity } from './base.entity';
-
+import { Token } from './token.entity';
 @Entity({ name: 'user' })
 export class User extends BaseEntity {
 
@@ -8,9 +9,7 @@ export class User extends BaseEntity {
   username: string;
 
   @Column({ type: 'varchar', length: 300 })
-  email: string;
-
-  @Column({ type: 'varchar', length: 300 })
+  @Exclude()
   password: string;
 
   @Column('boolean', {default: false})
@@ -24,5 +23,9 @@ export class User extends BaseEntity {
 
   @Column({ type: 'timestamp', nullable:true}) 
   deletedAt: Date;
+
+  @OneToOne(() => Token)
+    @JoinColumn()
+    token: Token;
   
 }
