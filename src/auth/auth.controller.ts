@@ -4,7 +4,6 @@ import { User } from '../model/user.entity';
 import { RegisterDto, LoginDto } from '../Dto/auth.dto';
 import { JwtAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
-import { Request } from 'express';
 import { GrpcMethod} from '@nestjs/microservices';
 @Controller('auth')
 export class AuthController {
@@ -12,13 +11,13 @@ export class AuthController {
   private readonly service: AuthService;
 
   @GrpcMethod('AuthService', 'register')
-  private register(@Body() body: RegisterDto): Promise<User | never> {
-    return this.service.register(body);
+  private register(data:any): Promise<User | never> {
+    return this.service.register(data);
   }
 
   @GrpcMethod('AuthService', 'login')
-  private login(@Body() body: LoginDto): Promise<string | never> {
-    return this.service.login(body);
+  private login(data:any): Promise<string | never> {
+    return this.service.login(data);
   }
 
 }
