@@ -37,7 +37,7 @@ export class UserService {
     async getById(id){
         try{
          const user=await this.userRepositoy.findOne({id:id});
-         if(user == undefined){
+         if(user == undefined || user.isDeleted == true){
             return {msg:"user not found"};
          }
          else return user;
@@ -54,8 +54,6 @@ export class UserService {
 
             return {msg:"user not found"};
         }
-        console.log(Date())
-    
         await this.userRepositoy.update({id:id},{isDeleted:true,deletedAt:Date()});
         return {msg:"user deleted"}
        }
