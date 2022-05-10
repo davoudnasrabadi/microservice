@@ -11,7 +11,7 @@ export class AuthController {
   private readonly service: AuthService;
 
   @GrpcMethod('UsersService', 'register')
-  private register(data:any): Promise<User | never> {
+  private register(data:any): Promise<string> {
     return this.service.register(data);
   }
 

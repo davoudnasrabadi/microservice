@@ -9,14 +9,14 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigService } from '@nestjs/config';
 import { Token } from 'src/model/token.entity';
-
+import {jwtConstants} from '../constants/index';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt', property: 'user' }),
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get('JWT_KEY'),
+      useFactory: () => ({
+        secret: jwtConstants.secret,
         signOptions: { expiresIn: '604800s' },
       }),
     }),

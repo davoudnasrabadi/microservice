@@ -28,7 +28,7 @@ export class AuthHelper {
 
   // Generate JWT Token
   public generateToken(user: User): string {
-    return this.jwt.sign({ id: user.id, username: user.username });
+    return this.jwt.sign({ username: user.username });
   }
 
   // Validate User's password

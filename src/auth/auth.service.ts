@@ -17,7 +17,7 @@ export class AuthService {
     @Inject(AuthHelper)
     private readonly helper: AuthHelper;
 
-  public async register(body: RegisterDto): Promise<User | never> {
+  public async register(body: RegisterDto) :Promise<string>{
     const { username, password }: RegisterDto = body;
     let user: User = await this.userRepositoy.findOne({ where: { username } });
 
@@ -33,7 +33,11 @@ export class AuthService {
     token.token = this.helper.generateToken(user);
     await this.tokenRepository.save(token);
     user.token = token;
-    return this.userRepositoy.save(user);
+    await this.userRepositoy.save(user);
+    const data = {
+        token:token.token
+    }
+    return JSON.stringify(data);
   }
 
   public async login(body: LoginDto): Promise<string | never> {
