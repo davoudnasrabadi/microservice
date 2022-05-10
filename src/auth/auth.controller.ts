@@ -10,12 +10,12 @@ export class AuthController {
   @Inject(AuthService)
   private readonly service: AuthService;
 
-  @GrpcMethod('AuthService', 'register')
+  @GrpcMethod('UsersService', 'register')
   private register(data:any): Promise<User | never> {
     return this.service.register(data);
   }
 
-  @GrpcMethod('AuthService', 'login')
+  @GrpcMethod('UsersService', 'login')
   private login(data:any): Promise<string | never> {
     return this.service.login(data);
   }
