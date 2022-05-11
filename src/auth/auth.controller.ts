@@ -2,7 +2,7 @@
 import { Body, Controller, Inject, Post, ClassSerializerInterceptor, UseInterceptors, UseGuards, Req } from '@nestjs/common';
 import { User } from '../model/user.entity';
 import { RegisterDto, LoginDto } from '../Dto/auth.dto';
-import { JwtAuthGuard } from './auth.guard';
+//import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthService } from './auth.service';
 import { GrpcMethod} from '@nestjs/microservices';
 import {tokenDto,MsgDto} from './dto.ts/index';

@@ -23,12 +23,12 @@ export class AuthHelper {
 
   // Get User by User ID we get from decode()
   public async validateUser(decoded: any): Promise<User> {
-    return this.repository.findOne(decoded.id);
+    return this.repository.findOne({id:decoded.id});
   }
 
   // Generate JWT Token
   public generateToken(user: User): string {
-    return this.jwt.sign({ username: user.username });
+    return this.jwt.sign({ id:user.id,username: user.username });
   }
 
   // Validate User's password
@@ -46,7 +46,6 @@ export class AuthHelper {
   // Validate JWT Token, throw forbidden error if JWT Token is invalid
   private async validate(token: string): Promise<boolean | never> {
     const decoded: unknown = this.jwt.verify(token);
-
     if (!decoded) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }

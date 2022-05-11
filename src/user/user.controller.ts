@@ -1,4 +1,4 @@
-import { Controller, Post,Get, Body, Param, Delete, Put, UsePipes,Logger } from '@nestjs/common';
+import { Controller, Post,Get, Body, Param, Delete, Put, UsePipes,Logger, UseGuards, Req } from '@nestjs/common';
 import { GrpcMethod} from '@nestjs/microservices';
 import {CreateUserDto} from '../Dto/createUser.dto';
 import { UserService } from './user.service';
@@ -9,13 +9,14 @@ import {Observable} from 'rxjs';
 import {ValidationPipe} from '../pipes/myPipe';
 import {ResponseDto} from '../Dto/responseDto';
 import {deleteMsg,updateMsg,AllMsg,UserByIdDto,errorMsg} from '../Dto/responseDto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @Controller('users')
 export class UserController {
     constructor(private userService:UserService){}
     private readonly logger = new Logger(UserController.name);
     
     @GrpcMethod('UsersService', 'FindAll')
-    getAll():Promise<AllMsg>{
+    getAll(@Req() req:any):Promise<AllMsg>{
           this.logger.log("Inside getAll of microservice....")
           return this.userService.getAll();
     }

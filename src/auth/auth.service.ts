@@ -4,7 +4,7 @@ import { User } from '../model/user.entity';
 import { Repository } from 'typeorm';
 import { RegisterDto, LoginDto } from '../Dto/auth.dto';
 import { AuthHelper } from './auth.helper';
-import { Token } from 'src/model/token.entity';
+import { Token } from '../model/token.entity';
 import { use } from 'passport';
 import {tokenDto,MsgDto} from './dto.ts/index';
 @Injectable()
@@ -59,6 +59,15 @@ export class AuthService {
       token:token
     }
     return data;
+  }
+  
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.userRepositoy.findOne(username);
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
   }
 
 
