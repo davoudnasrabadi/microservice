@@ -6,7 +6,7 @@ import { User } from '../model/user.entity';
 import { UserDto } from '../Dto/user.dto';
 import {serialize} from 'class-transformer';
 import * as bcrypt from 'bcryptjs';
-import {updateMsg} from '../Dto/responseDto'
+import {deleteMsg, updateMsg,AllMsg,UserByIdDto, errorMsg} from '../Dto/responseDto';
 @Injectable()
 export class UserService {
 
@@ -17,7 +17,7 @@ export class UserService {
        return this.userRepositoy.save(user)
    }
 
-    async getAll(){
+    async getAll():Promise<AllMsg>{
        let a = await this.userRepositoy.find({where:{isDeleted:false},select:['id','username','createdAt','updatedAt']});
        let msg = {
            all:JSON.stringify(a)
@@ -35,7 +35,7 @@ export class UserService {
         else return null;
     }
 
-    async getById(id){
+    async getById(id:string):Promise<UserByIdDto | errorMsg>{
         try{
          const user=await this.userRepositoy.findOne({id:id});
          if(user == undefined || user.isDeleted == true){
@@ -44,11 +44,11 @@ export class UserService {
          else return user;
         }
         catch(er){
-            return {err:er.message};
+            return {msg:er.message};
         }
     }
 
-    async deleteById(id:string){
+    async deleteById(id:string):Promise<deleteMsg>{
         try{
         const user = await this.userRepositoy.findOne({id:id});
         if(user== undefined){
@@ -59,7 +59,7 @@ export class UserService {
         return {msg:"user deleted"}
        }
     catch(err){
-        return {err:err.message}
+        return {msg:err.message}
     }
     }
     async updateUser(id:string,body:any):Promise<updateMsg>{
@@ -72,7 +72,8 @@ export class UserService {
       const pass= bcrypt.hashSync(body.password, salt);
       let newbody = {
           username:body.username,
-          password:pass
+          password:pass,
+          updatedAt:Date()
       }
       await this.userRepositoy.update(id,newbody);
       return {msg:"user updated"};

@@ -6,7 +6,7 @@ import { RegisterDto, LoginDto } from '../Dto/auth.dto';
 import { AuthHelper } from './auth.helper';
 import { Token } from 'src/model/token.entity';
 import { use } from 'passport';
-import {tokenDto} from './dto.ts/index';
+import {tokenDto,MsgDto} from './dto.ts/index';
 @Injectable()
 export class AuthService {
    
@@ -17,12 +17,12 @@ export class AuthService {
     @Inject(AuthHelper)
     private readonly helper: AuthHelper;
 
-  public async register(body: RegisterDto):Promise<tokenDto>{
+  public async register(body: RegisterDto):Promise<tokenDto | MsgDto>{
     const { username, password }: RegisterDto = body;
     let user: User = await this.userRepositoy.findOne({ where: { username } });
 
     if (user) {
-      throw new HttpException('Conflict', HttpStatus.CONFLICT);
+      return {msg:"user exists"};
     }
 
     user = new User();
@@ -40,17 +40,17 @@ export class AuthService {
     return data;
   }
 
-  public async login(body: LoginDto): Promise<tokenDto>{
+  public async login(body: LoginDto): Promise<tokenDto | MsgDto>{
     const { username, password }: LoginDto = body;
     const user: User = await this.userRepositoy.findOne({ where: { username } });
 
     if (!user) {
-      throw new HttpException('No user found', HttpStatus.NOT_FOUND);
+      return {msg:"user not found"};
     }
     const id = user.id;
     const isPasswordValid: boolean = this.helper.isPasswordValid(password, user.password);
     if (!isPasswordValid) {
-      throw new HttpException('No user found', HttpStatus.NOT_FOUND);
+      return {msg:"user password is wrong"};
     }
 
     const token =this.helper.generateToken(user);

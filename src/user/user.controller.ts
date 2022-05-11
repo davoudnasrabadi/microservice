@@ -8,30 +8,30 @@ import { User } from '../model/user.entity';
 import {Observable} from 'rxjs';
 import {ValidationPipe} from '../pipes/myPipe';
 import {ResponseDto} from '../Dto/responseDto';
+import {deleteMsg,updateMsg,AllMsg,UserByIdDto,errorMsg} from '../Dto/responseDto';
 @Controller('users')
 export class UserController {
     constructor(private userService:UserService){}
     
     
     @GrpcMethod('UsersService', 'FindAll')
-    getAll(data:any){
-          console.log('here');
+    getAll():Promise<AllMsg>{
           return this.userService.getAll();
     }
     @GrpcMethod('UsersService', 'FindOne')
-    getById(id:any):any{
+    getById(id:any):Promise<UserByIdDto | errorMsg>{
         const i=id.id;
         return this.userService.getById(i);
     }
     
     @GrpcMethod('UsersService', 'DeleteOne')
-    deleteById(id:any){
+    deleteById(id:any):Promise<deleteMsg>{
         const i = id.id;
         return this.userService.deleteById(i);
     }
 
     @GrpcMethod('UsersService', 'UpdateOne')
-    updateUser(data:any){
+    updateUser(data:any):Promise<updateMsg>{
         const id = data.id;
         const body = {
             username:data.username,
