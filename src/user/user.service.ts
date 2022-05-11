@@ -5,8 +5,8 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { User } from '../model/user.entity';
 import { UserDto } from '../Dto/user.dto';
 import {serialize} from 'class-transformer';
-import { type } from 'os';
-import { date } from 'joi';
+import * as bcrypt from 'bcryptjs';
+import {updateMsg} from '../Dto/responseDto'
 @Injectable()
 export class UserService {
 
@@ -18,10 +18,11 @@ export class UserService {
    }
 
     async getAll(){
-       let a = await this.userRepositoy.find();
-       let d = JSON.stringify(a);
-        return {data:d}
-       
+       let a = await this.userRepositoy.find({where:{isDeleted:false},select:['id','username','createdAt','updatedAt']});
+       let msg = {
+           all:JSON.stringify(a)
+       }
+       return msg;
     }
 
     async getByUserName(username:string){
@@ -61,18 +62,24 @@ export class UserService {
         return {err:err.message}
     }
     }
-    async updateUser(id:string,body:any){
+    async updateUser(id:string,body:any):Promise<updateMsg>{
       try{
       const user = await this.userRepositoy.findOne({id:id});
       if(user === undefined){
         return {msg:"user not found"};
       }
-       await this.userRepositoy.update(id,body);
-       return {msg:"user updated"};
+      const salt: string = bcrypt.genSaltSync(10);
+      const pass= bcrypt.hashSync(body.password, salt);
+      let newbody = {
+          username:body.username,
+          password:pass
+      }
+      await this.userRepositoy.update(id,newbody);
+      return {msg:"user updated"};
 
     }
       catch(err){
-          return {err:err.message};
+          return {msg:err.message};
       }
     }
     

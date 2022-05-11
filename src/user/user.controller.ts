@@ -12,13 +12,10 @@ import {ResponseDto} from '../Dto/responseDto';
 export class UserController {
     constructor(private userService:UserService){}
     
-    @GrpcMethod('UsersService', 'CreateOne')
-    create(data:any){
-        return this.userService.createUser(data);
-    }
     
     @GrpcMethod('UsersService', 'FindAll')
     getAll(data:any){
+          console.log('here');
           return this.userService.getAll();
     }
     @GrpcMethod('UsersService', 'FindOne')
@@ -38,7 +35,6 @@ export class UserController {
         const id = data.id;
         const body = {
             username:data.username,
-            email:data.email,
             password:data.password
         }
        return this.userService.updateUser(id,body);

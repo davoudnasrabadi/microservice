@@ -1,3 +1,7 @@
 export class ResponseDto {
-    msg:string
+    msg:string;
+}
+
+export class updateMsg {
+    msg:string;
 }

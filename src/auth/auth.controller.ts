@@ -5,18 +5,20 @@ import { RegisterDto, LoginDto } from '../Dto/auth.dto';
 import { JwtAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { GrpcMethod} from '@nestjs/microservices';
+import {tokenDto} from './dto.ts/index';
 @Controller('auth')
 export class AuthController {
   @Inject(AuthService)
   private readonly service: AuthService;
 
   @GrpcMethod('UsersService', 'register')
-  private register(data:any): Promise<string> {
-    return this.service.register(data);
+  private async register(data:any):Promise<tokenDto> {
+    const d= await this.service.register(data);
+    return d;
   }
 
   @GrpcMethod('UsersService', 'login')
-  private login(data:any): Promise<string | never> {
+  private login(data:any):Promise<tokenDto>{
     return this.service.login(data);
   }
 
