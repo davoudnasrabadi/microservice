@@ -1,15 +1,7 @@
 import { Controller, Post,Get, Body, Param, Delete, Put, UsePipes,Logger, UseGuards, Req } from '@nestjs/common';
 import { GrpcMethod} from '@nestjs/microservices';
-import {CreateUserDto} from '../Dto/createUser.dto';
 import { UserService } from './user.service';
-import { UserById } from '../interfaces/index';
-import { Metadata, ServerUnaryCall } from '@grpc/grpc-js';
-import { User } from '../model/user.entity';
-import {Observable} from 'rxjs';
-import {ValidationPipe} from '../pipes/myPipe';
-import {ResponseDto} from '../Dto/responseDto';
 import {deleteMsg,updateMsg,AllMsg,UserByIdDto,errorMsg} from '../Dto/responseDto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @Controller('users')
 export class UserController {
     constructor(private userService:UserService){}
